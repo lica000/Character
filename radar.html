@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OC Hub - 能力雷達圖</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="app-container">
+
+        <header class="main-header">
+
+            <div class="brand">
+                <h1>OC Hub</h1>
+                <span class="subtitle">能力雷達圖</span>
+            </div>
+
+            <div class="menu-dropdown-container">
+
+                <button class="menu-btn" onclick="toggleMenu()">
+                    選單
+                </button>
+
+                <div id="dropdownMenu" class="dropdown-content">
+                    <a href="index.html">
+                        角色大廳
+                    </a>
+
+                    <a href="matrix.html">
+                        雙軸座標圖
+                    </a>
+
+                    <a href="relation.html">
+                        角色關係圖
+                    </a>
+
+                    <a href="radar.html">
+                        能力雷達圖
+                    </a>
+
+                    <a href="#" onclick="resetToDefaultData(); return false;"
+                        style="color:#dc3545; border-top:1px solid #eee;">
+                        🔄 重置為開頁預設值
+                    </a>
+                </div>
+
+            </div>
+
+        </header>
+
+        <div class="matrix-layout">
+
+            <div class="matrix-top-bar">
+
+                <div class="axis-select-group">
+
+                    <label>
+                        選擇角色：
+                    </label>
+
+                    <select id="radarCharSelect" onchange="changeRadarCharacter(this.value)"></select>
+
+                </div>
+
+            </div>
+
+            <div class="matrix-section-card" style="text-align:center;">
+
+                <canvas id="radarCanvas" width="360" height="360" style="max-width:100%;"></canvas>
+
+            </div>
+
+            <div class="matrix-section-card">
+
+                <h3>
+                    能力數值微調 (0 ~ 100)
+                </h3>
+
+                <div id="radarSlidersContainer" style="
+            display:flex;
+            flex-direction:column;
+            gap:12px;
+            margin-top:12px;
+          "></div>
+
+                <h4 style="
+            margin-top:20px;
+            margin-bottom:8px;
+          ">
+                    新增/管理能力指標
+                </h4>
+
+                <div class="axis-add-row">
+
+                    <input type="text" id="newStatInput" placeholder="能力名稱 (例如: 智力, 速度)">
+
+                    <button class="btn btn-search" onclick="addRadarStat()">
+                        ＋ 新增指標
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="shared.js"></script>
+    <script src="radar.js"></script>
+</body>
+
+</html>

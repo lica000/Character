@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OC Hub - 角色大廳</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="app-container">
+
+        <header class="main-header">
+            <div class="brand">
+                <h1>OC Hub</h1>
+                <span class="subtitle">角色大廳</span>
+            </div>
+
+            <div class="menu-dropdown-container">
+                <button class="menu-btn" onclick="toggleMenu()">選單</button>
+
+                <div id="dropdownMenu" class="dropdown-content">
+                    <a href="index.html">角色大廳</a>
+                    <a href="matrix.html">雙軸座標圖</a>
+                    <a href="relation.html">角色關係圖</a>
+                    <a href="radar.html">能力雷達圖</a>
+                    <a href="#" onclick="resetToDefaultData(); return false;"
+                        style="color:#dc3545; border-top:1px solid #eee;">
+                        🔄 重置為開頁預設值
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <section class="toolbar">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="搜尋角色姓名或標籤..."
+                    onkeydown="if(event.key==='Enter') renderHall()">
+                <button class="btn btn-search" onclick="renderHall()">搜尋</button>
+            </div>
+
+            <div class="tags-filter-bar">
+                <span class="filter-label">篩選：</span>
+                <div id="tagFilterList" class="tag-filter-list"></div>
+            </div>
+        </section>
+
+        <section class="card-grid" id="characterGrid"></section>
+
+    </div>
+
+    <template id="characterCardTemplate">
+        <div class="card">
+
+            <div class="card-avatar-wrapper">
+                <img class="card-avatar" alt="頭像">
+            </div>
+
+            <div class="card-body">
+
+                <div class="card-title"></div>
+
+                <div class="card-tags">
+                    <div class="tag-add-btn-wrapper" onclick="event.stopPropagation();">
+                        <button class="tag-add-btn">+</button>
+
+                        <div class="tag-select-menu">
+                            <input type="text" placeholder="搜尋或輸入新標籤..." class="tag-menu-input">
+
+                            <div class="tag-options-list"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </template>
+
+    <script src="shared.js"></script>
+    <script src="hall.js"></script>
+</body>
+
+</html>

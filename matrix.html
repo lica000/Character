@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OC Hub - 雙軸座標圖</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="app-container">
+
+        <header class="main-header">
+            <div class="brand">
+                <h1>OC Hub</h1>
+                <span class="subtitle">雙軸座標圖</span>
+            </div>
+
+            <div class="menu-dropdown-container">
+                <button class="menu-btn" onclick="toggleMenu()">選單</button>
+
+                <div id="dropdownMenu" class="dropdown-content">
+                    <a href="index.html">角色大廳</a>
+                    <a href="matrix.html">雙軸座標圖</a>
+                    <a href="relation.html">角色關係圖</a>
+                    <a href="radar.html">能力雷達圖</a>
+
+                    <a href="#" onclick="resetToDefaultData(); return false;"
+                        style="color:#dc3545; border-top:1px solid #eee;">
+                        🔄 重置為開頁預設值
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <div class="matrix-layout">
+
+            <div class="matrix-top-bar">
+
+                <div class="matrix-axis-selects">
+
+                    <div class="axis-select-group">
+                        <label>X 軸：</label>
+                        <select id="matrixXAxisSelect" onchange="changeMatrixAxis('x', this.value)"></select>
+                    </div>
+
+                    <div class="axis-select-group">
+                        <label>Y 軸：</label>
+                        <select id="matrixYAxisSelect" onchange="changeMatrixAxis('y', this.value)"></select>
+                    </div>
+
+                </div>
+
+                <button id="dragLockBtn" class="btn" onclick="toggleMatrixDragLock()">
+                    🔒 啟用拖移編輯
+                </button>
+
+            </div>
+
+            <div class="chart-area">
+
+                <div class="chart-wrapper">
+
+                    <div class="axis-label axis-top" id="topLabel">
+                        上
+                    </div>
+
+                    <div class="axis-label axis-bottom" id="bottomLabel">
+                        下
+                    </div>
+
+                    <div class="axis-label axis-left" id="leftLabel">
+                        左
+                    </div>
+
+                    <div class="axis-label axis-right" id="rightLabel">
+                        右
+                    </div>
+
+                    <div class="chart" id="chartCanvas"></div>
+
+                </div>
+
+            </div>
+            <div class="matrix-section-card" id="matrixTagFilterPanel">
+                <h3>標籤篩選</h3>
+                <div id="matrixTagFilterList" class="matrix-tag-list"></div>
+                <p class="matrix-filter-hint">
+                    可複選；沒有勾選任何標籤時顯示全部未隱藏角色。
+                    勾選多個標籤時，符合其中任一個就會顯示在座標圖上。
+                </p>
+            </div>
+            <div class="matrix-section-card">
+
+                <div class="matrix-card-header">
+                    <h3>角色座標數值微調</h3>
+
+                    <button class="btn btn-search" onclick="addCharacterFromMatrix()">
+                        ＋ 新增角色
+                    </button>
+                </div>
+
+                <div class="table-wrapper matrix-table-scroll-wrapper">
+                    <table class="character-table">
+                        <thead>
+                            <tr id="matrixTableHead"></tr>
+                        </thead>
+                        <tbody id="matrixTableBody"></tbody>
+                    </table>
+                </div>
+
+            </div>
+
+            <div class="matrix-section-card">
+
+                <h3>座標軸設定與管理</h3>
+
+                <div id="matrixAxisList" class="matrix-axis-list"></div>
+
+                <div class="axis-add-row">
+
+                    <input id="newAxisLeftInput" type="text" placeholder="左/上 (例如: 怪人)">
+
+                    <input id="newAxisRightInput" type="text" placeholder="右/下 (例如: 常識人)">
+
+                    <button class="btn btn-search" type="button" onclick="addNewAxisFromInput()">
+                        ＋新增座標軸
+                    </button>
+
+                </div>
+
+                <h4 style="margin-top:16px;">
+                    常用範本座標軸
+                </h4>
+
+                <div id="commonAxesList" class="common-axes-tags"></div>
+
+            </div>
+
+            <div class="matrix-section-card">
+
+                <h3>文字資料匯入 / 匯出</h3>
+
+                <div style="
+            display:flex;
+            gap:12px;
+            margin-bottom:12px;
+            flex-wrap:wrap;
+          ">
+
+                    <button class="btn btn-search" onclick="generateExportText()">
+                        產生匯出文字
+                    </button>
+
+                    <button class="btn" onclick="copyExportText()">
+                        複製匯出內容
+                    </button>
+
+                    <button class="btn" onclick="importDataFromText()">
+                        執行文字匯入
+                    </button>
+
+                </div>
+
+                <textarea id="matrixIOTextarea" placeholder="匯出資料會出現在這裡，或貼上文字執行匯入..."></textarea>
+
+            </div>
+
+        </div>
+    </div>
+
+    <script src="shared.js"></script>
+    <script src="matrix.js"></script>
+</body>
+
+</html>
