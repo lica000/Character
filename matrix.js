@@ -452,7 +452,6 @@ async function copyExportText() {
    從文字匯入
    同名角色更新數值，不建立重複角色
    ============================================================ */
-
 function importDataFromText() {
     const area = document.getElementById("matrixIOTextarea");
     if (!area) return;
@@ -477,82 +476,131 @@ function importDataFromText() {
         return;
     }
 
-    let addedCount = 0;
-    let updatedCount = 0;
+    // 依照匯入標題尋找或建立座標軸
+    const axisHeaders = headers
+        .slice(1)
+        .filter(header => header !== "標籤");
 
-    lines.slice(1).forEach(line => {
-        const tagMatches = line.match(/#[^\s#]+/g) || [];
+    const importedAxes = axisHeaders.map(header => {
+        const normalizedHeader = header.replace(/\s*\/\s*/g, "/");
 
-        const cleanLine = line.replace(/#[^\s#]+/g, "").trim();
-        const parts = cleanLine.split(/\s+/);
+        // 尋找名稱相同的既有座標軸
+        let axis = matrixAxes.find(existing => {
+            const existingHeader =
+                `${ existing.leftTop }/${existing.rightBottom}`
+    .replace(/\s*\/\s*/g, "/");
 
-        const name = normalizeMatrixCharacterName(parts.shift());
-        if (!name) return;
-
-        const existingChar = characters.find(
-            char => normalizeMatrixCharacterName(char.name) === name
-        );
-
-        const target = existingChar || createCharacterData({
-            id: Date.now().toString() + Math.random().toString(36).substring(2, 7),
-            name,
-            color: DEFAULT_COLORS[
-                characters.length % DEFAULT_COLORS.length
-            ],
-            avatar: "",
-            fullBodyAvatar: "",
-            quote: "",
-            bio: "",
-            tags: [],
-            matrixValues: {},
-            radarValues: {}
+return existingHeader === normalizedHeader;
         });
 
-        target.name = name;
+// 找不到就新增座標軸
+if (!axis) {
+    const separator = normalizedHeader.indexOf("/");
+    const leftTop = separator >= 0
+        ? normalizedHeader.slice(0, separator).trim()
+        : normalizedHeader.trim();
+    const rightBottom = separator >= 0
+        ? normalizedHeader.slice(separator + 1).trim()
+        : "";
 
-        if (!target.matrixValues || typeof target.matrixValues !== "object") {
-            target.matrixValues = {};
-        }
+    axis = {
+        id: `axis_${Date.now()}_${Math.random()
+            .toString(36).substring(2, 8)}`,
+        leftTop,
+        rightBottom
+    };
 
-        matrixAxes.forEach((axis, index) => {
-            const raw = parts[index];
+    matrixAxes.push(axis);
+}
 
-            if (raw === undefined || raw === "") {
-                delete target.matrixValues[axis.id];
-                return;
-            }
+return axis;
+    });
 
-            const value = Number(raw);
+// 儲存新增的座標軸
+saveMatrixAxes();
 
-            if (Number.isFinite(value)) {
-                target.matrixValues[axis.id] = Math.max(
-                    0,
-                    Math.min(100, Math.round(value))
-                );
-            }
-        });
+let addedCount = 0;
+let updatedCount = 0;
 
-        target.tags = [
-            ...new Set(
-                tagMatches
-                    .map(tag => removeMatrixEmoji(tag.slice(1)).trim())
-                    .filter(Boolean)
-            )
-        ];
+lines.slice(1).forEach(line => {
+    const tagMatches = line.match(/#[^\s#]+/g) || [];
+    const cleanLine = line.replace(/#[^\s#]+/g, "").trim();
+    const parts = cleanLine.split(/\s+/);
 
-        if (existingChar) {
-            updatedCount++;
-        } else {
-            characters.push(target);
-            addedCount++;
+    const name = normalizeMatrixCharacterName(parts.shift());
+    if (!name) return;
+
+    const existingChar = characters.find(
+        char => normalizeMatrixCharacterName(char.name) === name
+    );
+
+    const target = existingChar || createCharacterData({
+        id: Date.now().toString() +
+            Math.random().toString(36).substring(2, 7),
+        name,
+        color: DEFAULT_COLORS[
+            characters.length % DEFAULT_COLORS.length
+        ],
+        avatar: "",
+        fullBodyAvatar: "",
+        quote: "",
+        bio: "",
+        tags: [],
+        matrixValues: {},
+        radarValues: {}
+    });
+
+    target.name = name;
+
+    if (!target.matrixValues ||
+        typeof target.matrixValues !== "object") {
+        target.matrixValues = {};
+    }
+
+    // 數值依照匯入標題對應的軸 ID 寫入
+    importedAxes.forEach((axis, index) => {
+        const raw = parts[index];
+
+        // 空白數值不覆蓋既有資料
+        if (raw === undefined || raw === "") return;
+
+        const value = Number(raw);
+
+        if (Number.isFinite(value)) {
+            target.matrixValues[axis.id] = Math.max(
+                0,
+                Math.min(100, Math.round(value))
+            );
         }
     });
 
-    saveCharacters(characters);
-    renderMatrixView();
+    target.tags = [
+        ...new Set(
+            tagMatches
+                .map(tag =>
+                    removeMatrixEmoji(tag.slice(1)).trim()
+                )
+                .filter(Boolean)
+        )
+    ];
 
-    alert(`匯入完成！\n新增角色：${addedCount}\n更新角色：${updatedCount}`);
+    if (existingChar) {
+        updatedCount++;
+    } else {
+        characters.push(target);
+        addedCount++;
+    }
+});
+
+saveCharacters(characters);
+renderMatrixView();
+
+alert(
+    `匯入完成！\n新增角色：${addedCount}` +
+    `\n更新角色：${updatedCount}`
+);
 }
+
 
 
 /* ============================================================
