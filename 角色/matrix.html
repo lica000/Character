@@ -83,7 +83,14 @@
                 </div>
 
             </div>
-
+            <div class="matrix-section-card" id="matrixTagFilterPanel">
+                <h3>標籤篩選</h3>
+                <div id="matrixTagFilterList" class="matrix-tag-list"></div>
+                <p class="matrix-filter-hint">
+                    可複選；沒有勾選任何標籤時顯示全部未隱藏角色。
+                    勾選多個標籤時，符合其中任一個就會顯示在座標圖上。
+                </p>
+            </div>
             <div class="matrix-section-card">
 
                 <div class="matrix-card-header">
@@ -94,7 +101,7 @@
                     </button>
                 </div>
 
-                <div class="table-wrapper">
+                <div class="table-wrapper matrix-table-scroll-wrapper">
                     <table class="character-table">
                         <thead>
                             <tr id="matrixTableHead"></tr>

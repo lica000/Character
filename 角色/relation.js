@@ -288,34 +288,35 @@ function addCharacterInline() {
     }
 
 
-    const newChar = {
+    const newChar =
+        createCharacterData({
 
-        id:
-            Date.now().toString() +
-            Math.random()
-                .toString(36)
-                .substring(2, 7),
+            id:
+                Date.now().toString() +
+                Math.random()
+                    .toString(36)
+                    .substring(2, 7),
 
-        name,
+            name,
 
-        color:
-            colorInput?.value ||
-            "#4CAF50",
+            color:
+                colorInput?.value ||
+                "#4CAF50",
 
-        avatar: "",
+            avatar: "",
 
-        fullBodyAvatar: "",
+            fullBodyAvatar: "",
 
-        tags: [],
+            tags: [],
 
-        quote: "",
+            quote: "",
 
-        bio: "",
+            bio: "",
 
-        matrixValues: {},
+            matrixValues: {},
 
-        radarValues: {}
-    };
+            radarValues: {}
+        });
 
 
     characters.push(

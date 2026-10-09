@@ -714,96 +714,40 @@ function renderTagMenuOptions(charId) {
 
 
 // ============================================================
-// 建立新標籤
-// ============================================================
-
-function createAndAddTag(charId) {
-
-    const input =
-        document.getElementById(
-            `tagMenuInput-${charId}`
-        );
-
-
-    const char =
-        characters.find(
-            c => String(c.id) === String(charId)
-        );
-
-
-    if (!input || !char) {
-        return;
-    }
-
-
-    const newTag =
-        input.value.trim();
-
-
-    if (!newTag) {
-        return;
-    }
-
-
-    if (!Array.isArray(char.tags)) {
-        char.tags = [];
-    }
-
-
-    if (
-        char.tags.includes(newTag)
-    ) {
-        return;
-    }
-
-
-    char.tags.push(
-        newTag
-    );
-
-
-    saveCharacters(
-        characters
-    );
-
-    renderHall();
-}
-
-
-// ============================================================
 // 建立新角色
 // ============================================================
 
 function createNewCharacter() {
 
-    const newChar = {
+    const newChar =
+        createCharacterData({
 
-        id:
-            Date.now().toString() +
-            Math.random()
-                .toString(36)
-                .substring(2, 7),
+            id:
+                Date.now().toString() +
+                Math.random()
+                    .toString(36)
+                    .substring(2, 7),
 
-        name:
-            "新角色",
+            name:
+                "新角色",
 
-        color:
-            DEFAULT_COLORS[
-            characters.length %
-            DEFAULT_COLORS.length
-            ],
+            color:
+                DEFAULT_COLORS[
+                characters.length %
+                DEFAULT_COLORS.length
+                ],
 
-        avatar: "",
-        fullBodyAvatar: "",
+            avatar: "",
+            fullBodyAvatar: "",
 
-        tags: [],
+            tags: [],
 
-        quote: "",
-        bio: "",
+            quote: "",
+            bio: "",
 
-        matrixValues: {},
-        radarValues: {}
-    };
+            matrixValues: {},
+            radarValues: {}
+        });
 
 
     characters.push(
@@ -819,8 +763,6 @@ function createNewCharacter() {
     location.href =
         `detail.html?id=${encodeURIComponent(newChar.id)}`;
 }
-
-
 // ============================================================
 // 點擊其他地方關閉標籤選單
 // ============================================================
