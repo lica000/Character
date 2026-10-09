@@ -885,7 +885,7 @@ display: block !important;
  max-width: 180px;
  padding: 2px 5px;
   border-radius: 4px;
-  background: rgba(255, 255, 255, 0.88);
+  background: rgba(255, 255, 255, 0.35);
   color: #222222;
   font-size: 12px;
   line-height: 1.4;
